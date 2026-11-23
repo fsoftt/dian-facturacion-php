@@ -1,0 +1,24 @@
+{
+    "name": "fsoftt/dian-facturacion",
+    "description": "Facturación electrónica DIAN (Colombia) para software propio: UBL 2.1, CUFE/CUDE, firma XAdES-EPES y cliente SOAP.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1",
+        "ext-dom": "*",
+        "ext-openssl": "*",
+        "ext-curl": "*",
+        "ext-zip": "*",
+        "ext-xmlwriter": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    },
+    "autoload": {
+        "psr-4": { "FacturacionDian\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "FacturacionDian\\Tests\\": "tests/" }
+    },
+    "scripts": { "test": "phpunit" }
+}
