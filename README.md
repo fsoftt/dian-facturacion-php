@@ -12,6 +12,29 @@ DIAN (Colombia) en la modalidad **software propio**, sin proveedor tecnológico:
 
 Sin dependencias de terceros: solo PHP ≥ 8.1 con `dom`, `openssl`, `curl`, `zip` y `xmlwriter`.
 
+## Instalación
+
+Es un paquete de Composer con autocarga PSR-4 (`FacturacionDian\`), así que funciona
+en cualquier proyecto PHP: Laravel, Symfony, CodeIgniter, WordPress o PHP sin framework.
+
+Mientras no esté publicado en Packagist, agregue el repositorio al `composer.json`
+de su proyecto:
+
+```json
+{
+    "repositories": [
+        { "type": "vcs", "url": "https://github.com/fsoftt/dian-facturacion-php" }
+    ]
+}
+```
+
+```bash
+composer require fsoftt/dian-facturacion:dev-main
+```
+
+Con un tag publicado (por ejemplo `v0.1.0`) puede fijar la versión: `composer require fsoftt/dian-facturacion:^0.1`.
+En proyectos sin framework solo falta `require 'vendor/autoload.php';`.
+
 ## Qué necesita antes de empezar
 
 1. **Certificado digital** de persona jurídica o natural emitido por una entidad de

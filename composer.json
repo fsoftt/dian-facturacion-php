@@ -15,10 +15,26 @@
         "phpunit/phpunit": "^10.5"
     },
     "autoload": {
-        "psr-4": { "FacturacionDian\\": "src/" }
+        "psr-4": {
+            "FacturacionDian\\": "src/"
+        }
     },
     "autoload-dev": {
-        "psr-4": { "FacturacionDian\\Tests\\": "tests/" }
+        "psr-4": {
+            "FacturacionDian\\Tests\\": "tests/"
+        }
     },
-    "scripts": { "test": "phpunit" }
+    "scripts": {
+        "test": "phpunit"
+    },
+    "keywords": [
+        "dian",
+        "colombia",
+        "facturacion-electronica",
+        "factura-electronica",
+        "ubl",
+        "xades",
+        "cufe"
+    ],
+    "minimum-stability": "stable"
 }
