@@ -91,8 +91,41 @@ if ($respuesta->esValido()) {
 ```
 
 Ejemplo completo en [`examples/enviar_factura.php`](examples/enviar_factura.php).
-Las notas crédito y débito usan el mismo `Documento` con `TipoDocumento::NotaCredito`
-o `NotaDebito` y una `Referencia` a la factura afectada.
+
+### Nota crédito o débito
+
+```php
+use FacturacionDian\Modelo\Referencia;
+
+$nota = new Documento(
+    tipo: TipoDocumento::NotaCredito,           // o TipoDocumento::NotaDebito
+    prefijo: 'NC',
+    consecutivo: 1,
+    fecha: new DateTimeImmutable(),
+    adquirente: Parte::consumidorFinal(),
+    lineas: [new Linea('Devolución', cantidad: 1, precioUnitario: 100000, impuestos: [Impuesto::iva(19)])],
+    referencia: new Referencia(
+        numero: 'SETP990000001',                // Factura afectada
+        cufe: $cufeDeLaFactura,
+        fecha: new DateTimeImmutable('2026-11-23'),
+        concepto: '1',                          // 1 devolución parcial, 2 anulación, 3 descuento...
+        descripcion: 'Devolución parcial',
+    ),
+);
+$respuesta = $dian->enviar($dian->preparar($nota, secuenciaEnvio: 2));
+```
+
+### Consultas
+
+```php
+$dian->consultar($cufe);          // Estado de un documento por CUFE/CUDE
+$dian->consultarZip($zipKey);     // Resultado de un envío asíncrono o del set de pruebas
+$dian->consultarRangos();         // Rangos de numeración y clave técnica
+```
+
+Toda respuesta expone `esValido()`, `codigo()`, `descripcion()`, `mensaje()`, `errores()`
+y `applicationResponse()`. Los fallos de comunicación y los SOAP Fault lanzan
+`FacturacionDian\Ws\ErrorDian`.
 
 ### Proceso de habilitación
 
@@ -106,6 +139,22 @@ o `NotaDebito` y una `Referencia` a la factura afectada.
 - El **consecutivo** de cada prefijo y la **secuencia de envío** anual (nombre del archivo).
 - El **XML firmado sin modificar** (reformatearlo invalida la firma) y el
   `ApplicationResponse` que devuelve la DIAN.
+
+## Enlaces de la DIAN
+
+| Recurso | Enlace |
+| --- | --- |
+| Micrositio de facturación electrónica | <https://micrositios.dian.gov.co/sistema-de-facturacion-electronica/> |
+| Documentación técnica (anexo técnico, XSD, cajas de herramientas) | <https://micrositios.dian.gov.co/sistema-de-facturacion-electronica/documentacion-tecnica/> |
+| Portal de **habilitación** (registro del software, set de pruebas) | <https://catalogo-vpfe-hab.dian.gov.co/User/Login> |
+| Portal de **producción** (facturando electrónicamente) | <https://catalogo-vpfe.dian.gov.co/User/Login> |
+| Servicio web de habilitación (WSDL) | <https://vpfe-hab.dian.gov.co/WcfDianCustomerServices.svc?wsdl> |
+| Servicio web de producción (WSDL) | <https://vpfe.dian.gov.co/WcfDianCustomerServices.svc?wsdl> |
+| Política de firma v2 | <https://facturaelectronica.dian.gov.co/politicadefirma/v2/politicadefirmav2.pdf> |
+| Portal general de la DIAN (RUT, resoluciones de numeración) | <https://www.dian.gov.co/> |
+
+La DIAN reorganiza su sitio con frecuencia; si un enlace del micrositio cambia, las
+URL de los portales y de los servicios web son las que usa la librería y son estables.
 
 ## Estado y alcance
 
@@ -137,3 +186,7 @@ composer test
 
 Nunca versione el `.p12`, su clave ni el PIN del software; el `.gitignore` excluye
 `*.p12`, `*.pfx`, `*.pem` y `.env`.
+
+## Licencia
+
+[MIT](LICENSE). Este proyecto no está afiliado a la DIAN ni avalado por ella.
